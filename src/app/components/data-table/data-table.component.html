@@ -1,0 +1,179 @@
+<!--
+  Data Table Component Template
+  Displays employee data with search, sorting, and pagination
+-->
+<div class="data-table-container">
+  <!-- Search input section -->
+  <div class="search-section">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="search-icon"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search employees (fuzzy matching enabled)..."
+        [value]="searchTerm"
+        (input)="onSearchInput($event)"
+        aria-label="Search employees"
+      />
+    </div>
+    <!-- Display current results count -->
+    <div class="results-info">
+      {{ getDisplayRange() }}
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p>Loading employee data...</p>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Data table -->
+  <div *ngIf="!isLoading && !errorMessage" class="table-responsive">
+    <table class="table table-hover">
+      <!-- Table header with sortable columns -->
+      <thead>
+        <tr>
+          <!-- ID Column -->
+          <th (click)="onSort('id')" class="sortable">
+            ID
+            <span [class]="getSortIcon('id')"></span>
+          </th>
+          <!-- First Name Column -->
+          <th (click)="onSort('first_name')" class="sortable">
+            First Name
+            <span [class]="getSortIcon('first_name')"></span>
+          </th>
+          <!-- Last Name Column -->
+          <th (click)="onSort('last_name')" class="sortable">
+            Last Name
+            <span [class]="getSortIcon('last_name')"></span>
+          </th>
+          <!-- Email Column -->
+          <th (click)="onSort('email')" class="sortable">
+            Email
+            <span [class]="getSortIcon('email')"></span>
+          </th>
+          <!-- Role Column -->
+          <th (click)="onSort('role')" class="sortable">
+            Role
+            <span [class]="getSortIcon('role')"></span>
+          </th>
+          <!-- Department Column -->
+          <th (click)="onSort('department')" class="sortable">
+            Department
+            <span [class]="getSortIcon('department')"></span>
+          </th>
+          <!-- Status Column -->
+          <th (click)="onSort('status')" class="sortable">
+            Status
+            <span [class]="getSortIcon('status')"></span>
+          </th>
+        </tr>
+      </thead>
+
+      <!-- Table body with employee data -->
+      <tbody>
+        <!-- No results message -->
+        <tr *ngIf="displayedEmployees.length === 0">
+          <td colspan="7" class="text-center no-results">
+            No employees found matching your search criteria.
+          </td>
+        </tr>
+
+        <!-- Employee rows -->
+        <tr *ngFor="let employee of displayedEmployees">
+          <td>{{ employee.id }}</td>
+          <td>{{ employee.first_name }}</td>
+          <td>{{ employee.last_name }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.role }}</td>
+          <td>{{ employee.department }}</td>
+          <td>
+            <span [class]="getStatusClass(employee.status)">
+              {{ employee.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination controls -->
+  <nav *ngIf="!isLoading && !errorMessage && totalPages > 0" aria-label="Employee table pagination">
+    <ul class="pagination justify-content-center">
+      <!-- Previous button -->
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button
+          class="page-link"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+          aria-label="Previous page"
+        >
+          &laquo; Previous
+        </button>
+      </li>
+
+      <!-- First page (if not in view) -->
+      <li *ngIf="getPageNumbers()[0] > 1" class="page-item">
+        <button class="page-link" (click)="goToPage(1)">1</button>
+      </li>
+
+      <!-- Ellipsis before current range -->
+      <li *ngIf="getPageNumbers()[0] > 2" class="page-item disabled">
+        <span class="page-link">...</span>
+      </li>
+
+      <!-- Page numbers -->
+      <li
+        *ngFor="let page of getPageNumbers()"
+        class="page-item"
+        [class.active]="page === currentPage"
+      >
+        <button
+          class="page-link"
+          (click)="goToPage(page)"
+          [attr.aria-current]="page === currentPage ? 'page' : null"
+        >
+          {{ page }}
+        </button>
+      </li>
+
+      <!-- Ellipsis after current range -->
+      <li *ngIf="getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1" class="page-item disabled">
+        <span class="page-link">...</span>
+      </li>
+
+      <!-- Last page (if not in view) -->
+      <li *ngIf="getPageNumbers()[getPageNumbers().length - 1] < totalPages" class="page-item">
+        <button class="page-link" (click)="goToPage(totalPages)">{{ totalPages }}</button>
+      </li>
+
+      <!-- Next button -->
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <button
+          class="page-link"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+          aria-label="Next page"
+        >
+          Next &raquo;
+        </button>
+      </li>
+    </ul>
+
+    <!-- Page info -->
+    <div class="pagination-info text-center">
+      Page {{ currentPage }} of {{ totalPages }}
+    </div>
+  </nav>
+</div>

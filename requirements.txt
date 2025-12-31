@@ -1,0 +1,109 @@
+Angular Assignment: Data Table with Search and Pagination
+
+Objective
+
+Develop a single-page Angular application that reads data from a local JSON file and displays it in a sortable, searchable, and paginated table.
+
+The purpose of this assignment is to evaluate understanding of Angular fundamentals, data handling via services, template-driven UI rendering, and basic user interactions.
+
+Functional Requirements
+
+1. Data Source
+
+Create a local JSON file in the project.
+The JSON file should contain approximately 50 records.
+Each record should include:
+id
+name
+At least 2 additional meaningful fields (example: email, role, status, category, etc.).
+2. Data Access
+
+Create a service file to read and provide data from the JSON file.
+The component should consume data only through the service (no direct JSON import in the component).
+3. Landing Page Layout
+
+The landing page should contain:
+A carousel section at the top (static or dummy content is acceptable).
+Below the carousel, a table that displays data from the JSON file.
+ 
+4. Table Requirements
+
+The table must:
+Be created using Angular template syntax (not third-party table libraries).
+Display data populated from the JSON file via the service.
+Be sorted in ascending order based on a meaningful field (for example: name or id).
+The table should clearly show column headers and rows.
+5. Search Functionality
+
+A search input box must be provided above the table.
+Search behavior:
+Search should start as soon as the user starts typing.
+Results should dynamically update without page reload.
+Search should filter table rows based on at least one field (example: name).
+When searching:
+Results must be shown only in the same table format.
+Pagination should still apply to search results
+6. Pagination
+
+Add pagination controls at the bottom of the table.
+Pagination rules:
+Each page should display exactly 10 records.
+Pagination must work for:
+Full dataset
+Filtered (search) results
+Page navigation should update the table data accordingly.
+ Angular Assignment: Data Table with Search and Pagination
+
+Objective
+
+Develop a single-page Angular application that reads data from a local JSON file and displays it in a sortable, searchable, and paginated table.
+
+The purpose of this assignment is to evaluate understanding of Angular fundamentals, data handling via services, template-driven UI rendering, and basic user interactions.
+
+Functional Requirements
+
+1. Data Source
+
+Create a local JSON file in the project.
+The JSON file should contain approximately 50 records.
+Each record should include:
+id
+name
+At least 2 additional meaningful fields (example: email, role, status, category, etc.).
+2. Data Access
+
+Create a service file to read and provide data from the JSON file.
+The component should consume data only through the service (no direct JSON import in the component).
+3. Landing Page Layout
+
+The landing page should contain:
+A carousel section at the top (static or dummy content is acceptable).
+Below the carousel, a table that displays data from the JSON file.
+ 
+4. Table Requirements
+
+The table must:
+Be created using Angular template syntax (not third-party table libraries).
+Display data populated from the JSON file via the service.
+Be sorted in ascending order based on a meaningful field (for example: name or id).
+The table should clearly show column headers and rows.
+5. Search Functionality
+
+A search input box must be provided above the table.
+Search behavior:
+Search should start as soon as the user starts typing.
+Results should dynamically update without page reload.
+Search should filter table rows based on at least one field (example: name).
+When searching:
+Results must be shown only in the same table format.
+Pagination should still apply to search results
+6. Pagination
+
+Add pagination controls at the bottom of the table.
+Pagination rules:
+Each page should display exactly 10 records.
+Pagination must work for:
+Full dataset
+Filtered (search) results
+Page navigation should update the table data accordingly.
+ 

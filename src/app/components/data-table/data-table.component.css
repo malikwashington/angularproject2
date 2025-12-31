@@ -1,0 +1,295 @@
+/**
+ * Data Table Component Styles
+ * Styles for the employee data table with search, sorting, and pagination
+ */
+
+/* Main container */
+.data-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-top: 30px;
+}
+
+/* Search section styles */
+.search-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Search input group */
+.search-section .input-group {
+  max-width: 400px;
+  flex: 1;
+}
+
+/* Search input styling */
+.search-section .form-control {
+  border-radius: 8px;
+  padding: 10px 15px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+/* Search input focus state */
+.search-section .form-control:focus {
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.1);
+}
+
+/* Search input group text (icon container) */
+.search-section .input-group-text {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+}
+
+/* Search icon */
+.search-icon::before {
+  content: '🔍';
+  font-size: 1rem;
+}
+
+/* Results info text */
+.results-info {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Loading container */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+/* Loading text */
+.loading-container p {
+  margin-top: 15px;
+  font-size: 1rem;
+}
+
+/* Table responsive wrapper */
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Table styles */
+.table {
+  margin-bottom: 0;
+}
+
+/* Table header styles */
+.table thead {
+  background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
+}
+
+/* Table header cells */
+.table thead th {
+  color: white;
+  font-weight: 600;
+  padding: 14px 12px;
+  border: none;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Sortable column header */
+.table thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+/* Sortable column hover effect */
+.table thead th.sortable:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Sort icon base styles */
+.sort-icon {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 8px;
+  vertical-align: middle;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(255, 255, 255, 0.4);
+  position: relative;
+}
+
+/* Sort icon - unsorted state (shows both arrows) */
+.sort-icon::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(255, 255, 255, 0.4);
+  position: absolute;
+  top: 8px;
+  left: -5px;
+}
+
+/* Sort icon - ascending */
+.sort-icon.asc {
+  border-bottom-color: white;
+}
+
+.sort-icon.asc::after {
+  border-top-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Sort icon - descending */
+.sort-icon.desc {
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+}
+
+.sort-icon.desc::after {
+  border-top-color: white;
+}
+
+/* Table body cells */
+.table tbody td {
+  padding: 12px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Table row hover effect */
+.table tbody tr:hover {
+  background-color: #f8f9ff;
+}
+
+/* Alternating row colors */
+.table tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.table tbody tr:nth-child(even):hover {
+  background-color: #f8f9ff;
+}
+
+/* No results message */
+.no-results {
+  padding: 40px 20px !important;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Status badge styles - Bootstrap overrides for consistency */
+.badge {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 20px;
+}
+
+/* Pagination container */
+.pagination {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* Pagination button styles */
+.page-link {
+  color: #4a90d9;
+  border: 1px solid #e0e0e0;
+  padding: 8px 14px;
+  transition: all 0.2s ease;
+}
+
+/* Pagination button hover */
+.page-link:hover {
+  background-color: #4a90d9;
+  border-color: #4a90d9;
+  color: white;
+}
+
+/* Active page button */
+.page-item.active .page-link {
+  background-color: #4a90d9;
+  border-color: #4a90d9;
+}
+
+/* Disabled pagination button */
+.page-item.disabled .page-link {
+  color: #adb5bd;
+  background-color: #f8f9fa;
+}
+
+/* Pagination info text */
+.pagination-info {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  /* Stack search and results info on smaller screens */
+  .search-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-section .input-group {
+    max-width: 100%;
+  }
+
+  .results-info {
+    text-align: center;
+  }
+
+  /* Reduce table cell padding */
+  .table thead th,
+  .table tbody td {
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+
+  /* Hide email column on tablets */
+  .table thead th:nth-child(4),
+  .table tbody td:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Further reduce padding on mobile */
+  .data-table-container {
+    padding: 15px;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: 8px 6px;
+    font-size: 0.85rem;
+  }
+
+  /* Hide more columns on mobile */
+  .table thead th:nth-child(5),
+  .table tbody td:nth-child(5),
+  .table thead th:nth-child(6),
+  .table tbody td:nth-child(6) {
+    display: none;
+  }
+
+  /* Smaller pagination buttons */
+  .page-link {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+}
