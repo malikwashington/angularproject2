@@ -4,7 +4,8 @@
  * Cards always face outward from the sphere's center
  * Uses CSS 3D transforms with backface-visibility for proper card orientation
  */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
 
 /** Interface defining the structure of a carousel slide */
 interface Slide {
@@ -62,14 +63,19 @@ export class CarouselComponent implements OnInit, OnDestroy {
   /** Radius of the invisible sphere (distance from center to cards) */
   sphereRadius = 400;
 
-  /** Reference to the auto-play interval timer */
-  private autoPlayInterval: any;
+  /** Subscription to the auto-play interval observable */
+  private autoPlaySubscription: Subscription | null = null;
 
   /** Duration in milliseconds between automatic rotations */
   private autoPlayDuration = 4000;
 
   /** Flag to track if user is interacting with carousel */
   isInteracting = false;
+
+  /**
+   * Constructor - injects ChangeDetectorRef for manual change detection
+   */
+  constructor(private cdr: ChangeDetectorRef) {}
 
   /**
    * Lifecycle hook - initializes the component
@@ -139,22 +145,24 @@ export class CarouselComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Starts the automatic rotation of the carousel
+   * Starts the automatic rotation of the carousel using RxJS interval
    */
   private startAutoPlay(): void {
-    this.autoPlayInterval = setInterval(() => {
+    this.autoPlaySubscription = interval(this.autoPlayDuration).subscribe(() => {
       if (!this.isInteracting) {
         this.rotationAngle -= this.anglePerSlide;
+        this.cdr.detectChanges();
       }
-    }, this.autoPlayDuration);
+    });
   }
 
   /**
-   * Stops the automatic rotation
+   * Stops the automatic rotation by unsubscribing from the interval
    */
   private stopAutoPlay(): void {
-    if (this.autoPlayInterval) {
-      clearInterval(this.autoPlayInterval);
+    if (this.autoPlaySubscription) {
+      this.autoPlaySubscription.unsubscribe();
+      this.autoPlaySubscription = null;
     }
   }
 

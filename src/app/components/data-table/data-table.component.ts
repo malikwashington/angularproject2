@@ -3,7 +3,9 @@
  * Displays employee data in a sortable and paginated table
  * Search functionality is handled by a separate service
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Employee } from '../../models/employee.model';
 import { EmployeeService } from '../../services/employee.service';
 import { SearchService } from '../../services/search.service';
@@ -25,7 +27,7 @@ interface SortState {
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.css']
 })
-export class DataTableComponent implements OnInit {
+export class DataTableComponent implements OnInit, OnDestroy {
   /** All employees loaded from the service */
   allEmployees: Employee[] = [];
 
@@ -59,6 +61,12 @@ export class DataTableComponent implements OnInit {
   /** Error message if data loading fails */
   errorMessage = '';
 
+  /** Subject for debouncing search input */
+  private searchSubject = new Subject<string>();
+
+  /** Subscription to the debounced search observable */
+  private searchSubscription: Subscription | null = null;
+
   /**
    * Constructor - injects required services
    * @param employeeService - Service for fetching employee data
@@ -71,20 +79,45 @@ export class DataTableComponent implements OnInit {
 
   /**
    * Lifecycle hook - initializes the component
-   * Loads employee data from the service
+   * Loads employee data and sets up debounced search
    */
   ngOnInit(): void {
+    this.setupSearchDebounce();
     this.loadEmployees();
   }
 
   /**
-   * Loads employee data from the service
+   * Lifecycle hook - cleans up subscriptions when component is destroyed
    */
-  private loadEmployees(): void {
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+  }
+
+  /**
+   * Sets up the debounced search subscription
+   * Waits 300ms after typing stops before executing search
+   */
+  private setupSearchDebounce(): void {
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe((searchTerm) => {
+      this.searchTerm = searchTerm;
+      this.applyFilters();
+    });
+  }
+
+  /**
+   * Loads employee data from the service
+   * @param forceRefresh - If true, clears cache and fetches fresh data
+   */
+  private loadEmployees(forceRefresh = false): void {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.employeeService.getEmployees().subscribe({
+    this.employeeService.getEmployees(forceRefresh).subscribe({
       next: (employees) => {
         this.allEmployees = employees;
         this.applyFilters();
@@ -99,14 +132,22 @@ export class DataTableComponent implements OnInit {
   }
 
   /**
+   * Retries loading employee data after a failure
+   * Clears the cache to ensure a fresh fetch
+   */
+  retryLoad(): void {
+    this.employeeService.clearCache();
+    this.loadEmployees(true);
+  }
+
+  /**
    * Handles search input changes
-   * Delegates to search service for fuzzy matching
+   * Pushes to subject for debounced processing
    * @param event - The input event
    */
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.searchTerm = target.value;
-    this.applyFilters();
+    this.searchSubject.next(target.value);
   }
 
   /**

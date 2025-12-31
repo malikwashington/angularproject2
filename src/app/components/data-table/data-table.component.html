@@ -32,9 +32,12 @@
     <p>Loading employee data...</p>
   </div>
 
-  <!-- Error message -->
-  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-    {{ errorMessage }}
+  <!-- Error message with retry button -->
+  <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
+    <span>{{ errorMessage }}</span>
+    <button class="btn btn-outline-danger btn-sm" (click)="retryLoad()">
+      Retry
+    </button>
   </div>
 
   <!-- Data table -->

@@ -66,11 +66,14 @@ export class SearchService {
     return results.map((r) => r.employee);
   }
 
+  /** Minimum search length to use expensive Levenshtein algorithm */
+  private minLengthForLevenshtein = 3;
+
   /**
    * Calculates a fuzzy match score between search term and target string
    * Uses a combination of:
    * - Substring matching (exact containment)
-   * - Levenshtein distance (edit distance similarity)
+   * - Levenshtein distance (edit distance similarity) - only for 3+ char searches
    * - Subsequence matching (characters in order)
    * @param searchTerm - The search term to match
    * @param target - The target string to match against
@@ -95,13 +98,19 @@ export class SearchService {
       return 0.85;
     }
 
+    // For short searches (< 3 chars), skip expensive algorithms
+    // Simple substring matching is sufficient for 1-2 character searches
+    if (search.length < this.minLengthForLevenshtein) {
+      return 0;
+    }
+
     // Subsequence match - all characters appear in order
     const subsequenceScore = this.subsequenceMatchScore(search, text);
     if (subsequenceScore > 0) {
       return 0.5 + (subsequenceScore * 0.3);
     }
 
-    // Levenshtein distance-based similarity
+    // Levenshtein distance-based similarity (only for 3+ character searches)
     const maxLen = Math.max(search.length, text.length);
     if (maxLen === 0) return 0;
 

@@ -96,7 +96,6 @@
 
 /* Table header cells */
 .table thead th {
-  color: white;
   font-weight: 600;
   padding: 14px 12px;
   border: none;
@@ -171,6 +170,7 @@
 /* Table row hover effect */
 .table tbody tr:hover {
   background-color: #f8f9ff;
+  color: white;
 }
 
 /* Alternating row colors */
